@@ -1,0 +1,32 @@
+<example>
+
+<test id='ABCD' create='false' className='com.dom.parser.test.ABCD'>
+		<action do='LOAD' onStartupRunlevel='1' sequence='1' onFail='resource.conf.f' />
+		<action do='STOP' onShutdownRunlevel='1' sequence='3' />
+</test>
+
+<test id='RemoveMe' className='com.dom.parser.RemoveMe'>
+		<attribute id="login">RemoveMe</attribute>
+		<attribute id="password">1234</attribute>
+		<attribute id="photopath">/home/dom/parser/etc/pictures</attribute>
+		<action do='LOAD' onStartupRunlevel='8' sequence='17' onFail='resource.conf.f' />
+		<action do='STOP' onShutdownRunlevel='6' sequence='7' />
+</test>
+
+<test id='KeepMe' create='false' className='com.dom.parser.KeepMee'>
+		<action do='LOAD' onStartupRunlevel='1' sequence='2' onFail='resource.conf.f' />
+		<action do='STOP' onShutdownRunlevel='1' sequence='2' />
+
+		<!-- event types triggering an email -->
+		<attribute id='types'>
+			l,b,c
+		</attribute>
+
+		<!-- address of recipient and mail format -->
+		<attribute id='dest'>
+			mail.from=abc@aoc.com,
+			mail.to=father@123.com
+		</attribute>
+</test>
+
+</example>
