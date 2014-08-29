@@ -1,5 +1,6 @@
 <example>
 
+<!-- This is ABCD Comment -->
 <test id='ABCD' create='false' className='com.dom.parser.test.ABCD'>
 		<action do='LOAD' onStartupRunlevel='1' sequence='1' onFail='resource.conf.f' />
 		<action do='STOP' onShutdownRunlevel='1' sequence='3' />

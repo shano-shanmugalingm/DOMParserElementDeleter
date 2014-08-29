@@ -17,9 +17,11 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class DOMParserTestCase {
@@ -27,15 +29,42 @@ public class DOMParserTestCase {
 	@Test
 	public void testDeleteElement() {
 		DOMParser domParser = new DOMParser();
-		Document document = getTestDocument();
+		Document document = getTestDocument(false);
 		Element removedElement = domParser.removeElement(document, "test", "id", "RemoveMe");
 		printDocument(document);
 		printDocument(removedElement);
 	}
 
-	private Document getTestDocument() {
+	@Test
+	public void testReadComments() {
+		Document document = getTestDocument(true);
+		NodeList nodeList = document.getDocumentElement().getChildNodes();
+		for (int i = 0; i < nodeList.getLength(); i++) {
+	        if (nodeList.item(i).getNodeType() == Element.COMMENT_NODE) {
+	            Comment comment = (Comment) nodeList.item(i);
+	            System.out.println(comment.getData());
+	        }
+	    }
+	}
+	
+	@Test
+	public void testWriteComments() {
+		Document document = getTestDocument(true);
+		NodeList nodeList = document.getDocumentElement().getChildNodes();
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			if (nodeList.item(i).getNodeType() == Element.ELEMENT_NODE) {
+				Comment elementComment = document.createComment("This is a comment for testing");
+				((Element)nodeList.item(i)).insertBefore(elementComment, nodeList.item(i).getFirstChild());
+			}
+	    }
+		printDocument(document);
+	}
+	
+	private Document getTestDocument(boolean enableComments) {
 		Document document = null;
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+		if (!enableComments)
+			documentBuilderFactory.setIgnoringComments(true);
 		try {
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			document = documentBuilder.parse(URLClassLoader.getSystemResourceAsStream("TestXML.xml"));
